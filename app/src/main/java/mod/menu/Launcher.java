@@ -10,8 +10,6 @@ import android.view.View;
 public class Launcher extends Service {
 
     Menu menu;
-
-    //When this Class is called the code in this function will be executed
     @Override
     public void onCreate() {
         super.onCreate();
@@ -20,7 +18,6 @@ public class Launcher extends Service {
         menu.SetWindowManagerWindowService();
         menu.ShowMenu();
 
-        //Create a handler for this Class
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             public void run() {
@@ -35,7 +32,6 @@ public class Launcher extends Service {
         return null;
     }
 
-    //Check if we are still in the game. If now our mod.mod.menu and mod.mod.menu button will dissapear
     private boolean isNotInGame() {
         ActivityManager.RunningAppProcessInfo runningAppProcessInfo = new ActivityManager.RunningAppProcessInfo();
         ActivityManager.getMyMemoryState(runningAppProcessInfo);
@@ -50,13 +46,11 @@ public class Launcher extends Service {
         }
     }
 
-    //Destroy our View
     public void onDestroy() {
         super.onDestroy();
         menu.onDestroy();
     }
 
-    //Same as above so it wont crash in the background and therefore use alot of Battery life
     public void onTaskRemoved(Intent intent) {
         super.onTaskRemoved(intent);
         try {
@@ -67,7 +61,6 @@ public class Launcher extends Service {
         stopSelf();
     }
 
-    //Override our Start Command so the Service doesnt try to recreate itself when the App is closed
     public int onStartCommand(Intent intent, int i, int i2) {
         return Service.START_NOT_STICKY;
     }
