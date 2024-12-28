@@ -1,9 +1,8 @@
-package com.android.support;
+package mod.menu;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,10 +59,8 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.widget.RelativeLayout.ALIGN_PARENT_LEFT;
 import static android.widget.RelativeLayout.ALIGN_PARENT_RIGHT;
 
-import org.xml.sax.ErrorHandler;
-
 public class Menu {
-    //********** Here you can easly change the menu appearance **********//
+    //********** Here you can easly change the mod.mod.menu appearance **********//
 
     //region Variable
     public static final String TAG = "Mod_Menu"; //Tag for logcat
@@ -125,13 +122,13 @@ public class Menu {
         Preferences.context = context;
         rootFrame = new FrameLayout(context); // Global markup
         rootFrame.setOnTouchListener(onTouchListener());
-        mRootContainer = new RelativeLayout(context); // Markup on which two markups of the icon and the menu itself will be placed
-        mCollapsed = new RelativeLayout(context); // Markup of the icon (when the menu is minimized)
+        mRootContainer = new RelativeLayout(context); // Markup on which two markups of the icon and the mod.mod.menu itself will be placed
+        mCollapsed = new RelativeLayout(context); // Markup of the icon (when the mod.mod.menu is minimized)
         mCollapsed.setVisibility(View.VISIBLE);
         mCollapsed.setAlpha(ICON_ALPHA);
 
-        //********** The box of the mod menu **********
-        mExpanded = new LinearLayout(context); // Menu markup (when the menu is expanded)
+        //********** The box of the mod mod.mod.menu **********
+        mExpanded = new LinearLayout(context); // Menu markup (when the mod.mod.menu is expanded)
         mExpanded.setVisibility(View.GONE);
         mExpanded.setBackgroundColor(MENU_BG_COLOR);
         mExpanded.setOrientation(LinearLayout.VERTICAL);
@@ -143,7 +140,7 @@ public class Menu {
         gdMenuBody.setStroke(1, Color.parseColor("#32cb00")); //Set border
         //mExpanded.setBackground(gdMenuBody); //Apply GradientDrawable to it
 
-        //********** The icon to open mod menu **********
+        //********** The icon to open mod mod.mod.menu **********
         startimage = new ImageView(context);
         startimage.setLayoutParams(new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
         int applyDimension = (int) TypedValue.applyDimension(1, ICON_SIZE, context.getResources().getDisplayMetrics()); //Icon size
@@ -163,7 +160,7 @@ public class Menu {
             }
         });
 
-        //********** The icon in Webview to open mod menu **********
+        //********** The icon in Webview to open mod mod.mod.menu **********
         WebView wView = new WebView(context); //Icon size width=\"50\" height=\"50\"
         wView.setLayoutParams(new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
         int applyDimension2 = (int) TypedValue.applyDimension(1, ICON_SIZE, context.getResources().getDisplayMetrics()); //Icon size
@@ -238,7 +235,7 @@ public class Menu {
         subTitle.setGravity(Gravity.CENTER);
         subTitle.setPadding(0, 0, 0, 5);
 
-        //********** Mod menu feature list **********
+        //********** Mod mod.mod.menu feature list **********
         scrollView = new ScrollView(context);
         //Auto size. To set size manually, change the width and height example 500, 500
         scrlLL = new LinearLayout.LayoutParams(MATCH_PARENT, dp(MENU_HEIGHT));
@@ -327,12 +324,12 @@ public class Menu {
 
             @Override
             public void run() {
-                //If the save preferences is enabled, it will check if game lib is loaded before starting menu
+                //If the save preferences is enabled, it will check if game lib is loaded before starting mod.mod.menu
                 //Comment the if-else code out except startService if you want to run the app and test preferences
                 if (Preferences.loadPref && !IsGameLibLoaded() && !stopChecking) {
                     if (!viewLoaded) {
-                        Category(mods, "Save preferences was been enabled. Waiting for game lib to be loaded...\n\nForce load menu may not apply mods instantly. You would need to reactivate them again");
-                        Button(mods, -100, "Force load menu");
+                        Category(mods, "Save preferences was been enabled. Waiting for game lib to be loaded...\n\nForce load mod.mod.menu may not apply mods instantly. You would need to reactivate them again");
+                        Button(mods, -100, "Force load mod.mod.menu");
                         viewLoaded = true;
                     }
                     handler.postDelayed(this, 600);

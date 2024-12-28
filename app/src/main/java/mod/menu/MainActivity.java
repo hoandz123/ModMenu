@@ -1,4 +1,4 @@
-package com.android.support;
+package mod.menu;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,18 +29,18 @@ public class MainActivity extends Activity {
             try {
                 //Start service
                 hasLaunched = true;
-                //Launch mod menu.
+                //Launch mod mod.mod.menu.
                 MainActivity.this.startActivity(new Intent(MainActivity.this, Class.forName(MainActivity.this.GameActivity)));
                 Main.Start(this);
                 return;
             } catch (ClassNotFoundException e) {
                 Log.e("Mod_menu", "Error. Game's main activity does not exist");
-                //Uncomment this if you are following METHOD 2 to launch menu
+                //Uncomment this if you are following METHOD 2 to launch mod.mod.menu
                 //Toast.makeText(MainActivity.this, "Error. Game's main activity does not exist", Toast.LENGTH_LONG).show();
             }
         }
 
-        //Launch mod menu.
+        //Launch mod mod.mod.menu.
        // Main.StartWithoutPermission(this);
         Main.Start(this);
     }

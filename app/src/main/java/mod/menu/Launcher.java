@@ -1,4 +1,4 @@
-package com.android.support;
+package mod.menu;
 
 import android.app.ActivityManager;
 import android.app.Service;
@@ -35,7 +35,7 @@ public class Launcher extends Service {
         return null;
     }
 
-    //Check if we are still in the game. If now our menu and menu button will dissapear
+    //Check if we are still in the game. If now our mod.mod.menu and mod.mod.menu button will dissapear
     private boolean isNotInGame() {
         ActivityManager.RunningAppProcessInfo runningAppProcessInfo = new ActivityManager.RunningAppProcessInfo();
         ActivityManager.getMyMemoryState(runningAppProcessInfo);

@@ -67,7 +67,7 @@ void startActivityPermisson(JNIEnv *env, jobject ctx){
 void startService(JNIEnv *env, jobject ctx){
     jclass native_context = env->GetObjectClass(ctx);
     jclass intentClass = env->FindClass(OBFUSCATE("android/content/Intent"));
-    jclass actionString = env->FindClass(OBFUSCATE("com/android/support/Launcher"));
+    jclass actionString = env->FindClass(OBFUSCATE("mod/menu/Launcher"));
     jmethodID newIntent = env->GetMethodID(intentClass, OBFUSCATE("<init>"), OBFUSCATE("(Landroid/content/Context;Ljava/lang/Class;)V"));
     jobject intent = env->NewObject(intentClass,newIntent,ctx,actionString);
     jmethodID startActivityMethodId = env->GetMethodID(native_context, OBFUSCATE("startService"), OBFUSCATE("(Landroid/content/Intent;)Landroid/content/ComponentName;"));
@@ -90,8 +90,8 @@ void CheckOverlayPermission(JNIEnv *env, jclass thiz, jobject ctx){
         jclass Settings = env->FindClass(OBFUSCATE("android/provider/Settings"));
         jmethodID canDraw =env->GetStaticMethodID(Settings, OBFUSCATE("canDrawOverlays"), OBFUSCATE("(Landroid/content/Context;)Z"));
         if (!env->CallStaticBooleanMethod(Settings, canDraw, ctx)){
-            Toast(env,ctx,OBFUSCATE("Overlay permission is required in order to show mod menu."),1);
-            Toast(env,ctx,OBFUSCATE("Overlay permission is required in order to show mod menu."),1);
+            Toast(env,ctx,OBFUSCATE("Overlay permission is required in order to show mod mod.mod.menu."),1);
+            Toast(env,ctx,OBFUSCATE("Overlay permission is required in order to show mod mod.mod.menu."),1);
             startActivityPermisson(env, ctx);
 
             pthread_t ptid;
