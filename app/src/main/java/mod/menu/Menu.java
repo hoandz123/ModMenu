@@ -60,10 +60,7 @@ import static android.widget.RelativeLayout.ALIGN_PARENT_LEFT;
 import static android.widget.RelativeLayout.ALIGN_PARENT_RIGHT;
 
 public class Menu {
-    //********** Here you can easly change the mod.mod.menu appearance **********//
-
-    //region Variable
-    public static final String TAG = "Mod_Menu"; //Tag for logcat
+    public static final String TAG = "ModMenu";
 
     int TEXT_COLOR = Color.parseColor("#82CAFD");
     int TEXT_COLOR_2 = Color.parseColor("#FFFFFF");
@@ -101,7 +98,6 @@ public class Menu {
     boolean stopChecking, overlayRequired;
     Context getContext;
 
-    //initialize methods from the native library
     native void Init(Context context, TextView title, TextView subTitle);
 
     native String Icon();
@@ -114,8 +110,6 @@ public class Menu {
 
     native boolean IsGameLibLoaded();
 
-    //Here we write the code for our Menu
-    // Reference: https://www.androidhive.info/2016/11/android-floating-widget-like-facebook-chat-head/
     public Menu(Context context) {
 
         getContext = context;
