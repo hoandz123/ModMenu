@@ -73,7 +73,7 @@ public class Menu {
     int POS_Y = 100;
 
     float MENU_CORNER = 4f;
-    int ICON_SIZE = 45; //Change both width and height of image
+    int ICON_SIZE = 45;
     float ICON_ALPHA = 0.7f; //Transparent
     int ToggleON = Color.GREEN;
     int ToggleOFF = Color.RED;
