@@ -16,7 +16,6 @@ public class Launcher extends Service {
 
         menu = new Menu(this);
         menu.SetWindowManagerWindowService();
-        menu.ShowMenu();
 
         final Handler handler = new Handler();
         handler.post(new Runnable() {
@@ -39,16 +38,11 @@ public class Launcher extends Service {
     }
 
     private void Thread() {
-        if (isNotInGame()) {
-            menu.setVisibility(View.INVISIBLE);
-        } else {
-            menu.setVisibility(View.VISIBLE);
-        }
+
     }
 
     public void onDestroy() {
         super.onDestroy();
-        menu.onDestroy();
     }
 
     public void onTaskRemoved(Intent intent) {
