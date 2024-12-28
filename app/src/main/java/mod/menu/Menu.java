@@ -60,7 +60,7 @@ import static android.widget.RelativeLayout.ALIGN_PARENT_LEFT;
 import static android.widget.RelativeLayout.ALIGN_PARENT_RIGHT;
 
 public class Menu {
-    public static final String TAG = "ModMenu";
+    public static final String TAG = "gay";
 
     int TEXT_COLOR = Color.parseColor("#82CAFD");
     int TEXT_COLOR_2 = Color.parseColor("#FFFFFF");
