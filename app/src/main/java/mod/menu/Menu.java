@@ -24,6 +24,25 @@ import java.io.InputStream;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+//******************gay sex icon*********************************************
+import java.io.IOException;
+import java.io.InputStream;
+import android.view.Gravity;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.widget.TextView;
+import android.widget.ImageView;
+import android.graphics.Typeface;
+import android.widget.FrameLayout;
+import android.graphics.PorterDuff;
+import android.graphics.BitmapFactory;
+import android.content.res.AssetManager;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.GradientDrawable;
+
 public class Menu {
 
     public Context context;
@@ -85,7 +104,9 @@ public class Menu {
             rootFrame.setBackground(drawable);
         } catch (IOException e) {
             e.printStackTrace();
+            GaySex69Icon();
         }
+        GaySex69Icon();
 
         LinearLayout main1 = new LinearLayout(context);
         main1.setOrientation(LinearLayout.HORIZONTAL);
@@ -192,8 +213,102 @@ public class Menu {
 
         loadMenu();
     }
-    
 
+    //******************gay sex icon*********************************************
+    private void GaySex69Icon() {
+        FrameLayout customFrameLayout = new FrameLayout(context);
+        customFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(dp(170), dp(60)));
+        customFrameLayout.setBackground(createRectangleBackground());
+
+        customFrameLayout.addView(createCircleBackground());
+        customFrameLayout.addView(createIconImageView());
+        customFrameLayout.addView(createNameTextView());
+
+        rootFrame.addView(customFrameLayout);
+    }
+
+    private GradientDrawable createRectangleBackground() {
+        GradientDrawable background = new GradientDrawable();
+        background.setShape(GradientDrawable.RECTANGLE);
+        background.setCornerRadius(dp(50));
+        background.setColor(Color.parseColor("#80000000"));
+        background.setStroke(dp(1), Color.parseColor("#80ffffff"));
+        return background;
+    }
+
+    private ImageView createCircleBackground() {
+        ImageView circleBackground = new ImageView(context);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.OVAL);
+        drawable.setColor(Color.parseColor("#20ffffff"));
+        drawable.setStroke(dp(1), Color.WHITE);
+        circleBackground.setImageDrawable(drawable);
+
+        FrameLayout.LayoutParams circleParams = new FrameLayout.LayoutParams(dp(60), dp(60));
+        circleParams.gravity = Gravity.CENTER_VERTICAL | Gravity.START;
+        circleBackground.setLayoutParams(circleParams);
+
+        return circleBackground;
+    }
+
+    private ImageView createIconImageView() {
+        ImageView iconImageView = new ImageView(context);
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open("gaysexicon.png");
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            iconImageView.setImageBitmap(getCircularBitmap(bitmap));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        FrameLayout.LayoutParams iconParams = new FrameLayout.LayoutParams(dp(50), dp(50));
+        iconParams.gravity = Gravity.CENTER_VERTICAL | Gravity.START;
+        iconParams.leftMargin = dp(5);
+        iconImageView.setLayoutParams(iconParams);
+
+        return iconImageView;
+    }
+
+    private TextView createNameTextView() {
+        TextView nameTextView = new TextView(context);
+        nameTextView.setText("đọc là bị gay lỏ");
+        nameTextView.setTextColor(Color.WHITE);
+        nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        nameTextView.setTypeface(null, Typeface.BOLD);
+        nameTextView.setPadding(dp(10), 0, 0, 0);
+        nameTextView.setShadowLayer(dp(2), dp(2), dp(2), Color.WHITE);
+
+        FrameLayout.LayoutParams nameParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+        );
+        nameParams.gravity = Gravity.CENTER_VERTICAL;
+        nameParams.leftMargin = dp(70);
+        nameParams.rightMargin = dp(10);
+        nameParams.topMargin = dp(5);
+        nameParams.bottomMargin = dp(5);
+        nameTextView.setLayoutParams(nameParams);
+
+        return nameTextView;
+    }
+
+    private Bitmap getCircularBitmap(Bitmap bitmap) {
+        int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
+        Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
+
+        canvas.drawCircle(size / 2, size / 2, size / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, (size - bitmap.getWidth()) / 2, (size - bitmap.getHeight()) / 2, paint);
+
+        return output;
+    }
     @SuppressLint("WrongConstant")
     public void SetWindowManagerWindowService() {
         int iparams = Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O ? 2038 : 2002;
