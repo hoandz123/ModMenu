@@ -1,9 +1,14 @@
 package mod.menu;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,9 +16,14 @@ import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -74,8 +84,8 @@ public class Menu {
     boolean overlayRequired;
 
 
-    WindowManager mWindowManager;
-    WindowManager.LayoutParams vmParams;
+    WindowManager mWindowManager, mWindowManager2;
+    WindowManager.LayoutParams vmParams, vmParams2;
     FrameLayout rootFrame;
     LinearLayout maintab;
 
@@ -122,9 +132,7 @@ public class Menu {
             rootFrame.setBackground(drawable);
         } catch (IOException e) {
             e.printStackTrace();
-            GaySex69Icon();
         }
-        GaySex69Icon();
         addNewButton();
 
         LinearLayout main1 = new LinearLayout(context);
@@ -278,18 +286,162 @@ public class Menu {
 
 
     //******************gay sex icon*********************************************
-    private void GaySex69Icon() {
+    int initialWidth;
+    int defoultleftMargin;
+    boolean isRunShow = false;
+
+    private View GaySex69Icon() {
         FrameLayout customFrameLayout = new FrameLayout(context);
-        customFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(dp(170), dp(60)));
+        customFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(-2, dp(60)));
         customFrameLayout.setBackground(createRectangleBackground());
 
         customFrameLayout.addView(createCircleBackground());
         customFrameLayout.addView(createIconImageView());
         customFrameLayout.addView(createNameTextView());
 
-        rootFrame.addView(customFrameLayout);
-    }
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final Runnable showToastRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (initialWidth == 0) initialWidth = nameTextView.getWidth();
+                nameParams = (FrameLayout.LayoutParams) nameTextView.getLayoutParams(); // Sử dụng biến nameParams đã có
+                if (defoultleftMargin == 0) defoultleftMargin = nameParams.leftMargin;
 
+                ValueAnimator widthAnimator = ValueAnimator.ofInt(initialWidth, 0);
+                widthAnimator.setDuration(1000);
+                widthAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        int animatedValue = (int) animation.getAnimatedValue();
+                        ViewGroup.LayoutParams layoutParams = nameTextView.getLayoutParams();
+                        layoutParams.width = animatedValue;
+                        nameTextView.setLayoutParams(layoutParams);
+                    }
+                });
+
+                ValueAnimator marginAnimator = ValueAnimator.ofInt(defoultleftMargin, 0);
+                marginAnimator.setDuration(1000);
+                marginAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        int animatedValue = (int) animation.getAnimatedValue();
+                        nameParams.leftMargin = animatedValue;
+                        nameTextView.setLayoutParams(nameParams);
+                    }
+                });
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playSequentially(widthAnimator, marginAnimator);
+                animatorSet.start();
+            }
+        };
+        handler.postDelayed(showToastRunnable, 5000);
+
+        customFrameLayout.setOnTouchListener(new View.OnTouchListener() {
+            private float initialTouchX, initialTouchY;
+            private int initialX, initialY;
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                handler.removeCallbacks(showToastRunnable);
+                handler.postDelayed(showToastRunnable, 5000);
+
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = vmParams2.x;
+                        initialY = vmParams2.y;
+                        initialTouchX = motionEvent.getRawX();
+                        initialTouchY = motionEvent.getRawY();
+
+                        if (!isRunShow) animateViewFromZero();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        int rawX = (int) (motionEvent.getRawX() - initialTouchX);
+                        int rawY = (int) (motionEvent.getRawY() - initialTouchY);
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+                        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+                        int borderX = 20;
+                        int borderY = 40;
+
+                        int NewX = initialX + (int) (motionEvent.getRawX() - initialTouchX);
+                        int NewY = initialY + (int) (motionEvent.getRawY() - initialTouchY);
+
+                        if (NewX < borderX) NewX = borderX;
+                        if (NewY < borderY) NewY = borderY;
+                        if (NewX > screenWidth - borderX) NewX = screenWidth - borderX;
+                        if (NewY > screenHeight - borderY) NewY = screenHeight - borderY;
+
+                        vmParams2.x = NewX;
+                        vmParams2.y = NewY;
+                        mWindowManager2.updateViewLayout(view, vmParams2);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        return customFrameLayout;
+    }
+    private void animateViewFromZero() {
+        if (nameTextView.getWidth() != initialWidth && initialWidth != 0) {
+
+            isRunShow = true;
+            nameParams = (FrameLayout.LayoutParams) nameTextView.getLayoutParams();
+
+            ValueAnimator widthAnimator = ValueAnimator.ofInt(0, initialWidth);
+            widthAnimator.setDuration(1000);
+            widthAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int animatedValue = (int) animation.getAnimatedValue();
+                    ViewGroup.LayoutParams layoutParams = nameTextView.getLayoutParams();
+                    layoutParams.width = animatedValue;
+                    nameTextView.setLayoutParams(layoutParams);
+                }
+            });
+
+            ValueAnimator marginAnimator = ValueAnimator.ofInt(0, defoultleftMargin);
+            marginAnimator.setDuration(1000);
+            marginAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int animatedValue = (int) animation.getAnimatedValue();
+                    nameParams.leftMargin = animatedValue;
+                    nameTextView.setLayoutParams(nameParams);
+                }
+            });
+            widthAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    Log.d("ModMenu", "animation start");
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    Log.d("ModMenu", "animation end");
+                    isRunShow = false;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    Log.d("ModMenu", "animation cancel");
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                    Log.d("ModMenu", "animation repeat");
+                }
+            });
+
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playSequentially(marginAnimator, widthAnimator);
+            animatorSet.start();
+        }
+    }
     private GradientDrawable createRectangleBackground() {
         GradientDrawable background = new GradientDrawable();
         background.setShape(GradientDrawable.RECTANGLE);
@@ -333,34 +485,32 @@ public class Menu {
         return iconImageView;
     }
 
+    TextView nameTextView;
+    FrameLayout.LayoutParams nameParams;
     private TextView createNameTextView() {
-        TextView nameTextView = new TextView(context);
-        nameTextView.setText("đọc là bị gay lỏ");
-        try {
-            Typeface customFont = Typeface.createFromAsset(context.getAssets(), "staccato.ttf");
-            nameTextView.setTypeface(customFont);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        nameTextView = new TextView(context);
+        nameTextView.setText("Android Mod");
         nameTextView.setTextColor(Color.WHITE);
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         nameTextView.setTypeface(null, Typeface.BOLD);
         nameTextView.setPadding(dp(10), 0, 0, 0);
         nameTextView.setShadowLayer(dp(2), dp(2), dp(2), Color.WHITE);
 
-        FrameLayout.LayoutParams nameParams = new FrameLayout.LayoutParams(
+        nameTextView.setSingleLine(true);
+
+        nameParams = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT
         );
         nameParams.gravity = Gravity.CENTER_VERTICAL;
-        nameParams.leftMargin = dp(70);
-        nameParams.rightMargin = dp(10);
+        nameParams.leftMargin = dp(60);
+        nameParams.rightMargin = dp(20);
         nameParams.topMargin = dp(5);
         nameParams.bottomMargin = dp(5);
         nameTextView.setLayoutParams(nameParams);
-
         return nameTextView;
     }
+
 
     private Bitmap getCircularBitmap(Bitmap bitmap) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
@@ -378,16 +528,30 @@ public class Menu {
 
         return output;
     }
+
+
+
+
     @SuppressLint("WrongConstant")
     public void SetWindowManagerWindowService() {
         int iparams = Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O ? 2038 : 2002;
-        vmParams = new WindowManager.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, iparams, 8, -3);
+        vmParams = new WindowManager.LayoutParams(MENU_WIDTH, MENU_HEIGHT, iparams, 8, -3);
         vmParams.gravity = 51;
         vmParams.x = POS_X;
         vmParams.y = POS_Y;
 
         mWindowManager = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
         mWindowManager.addView(rootFrame, vmParams);
+
+        vmParams2 = new WindowManager.LayoutParams(-2, -2, iparams, 8, -3);
+        vmParams2.gravity = 51;
+        vmParams2.x = POS_X;
+        vmParams2.y = POS_Y;
+
+        mWindowManager2 = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
+        mWindowManager2.addView(GaySex69Icon(), vmParams2);
+
+
         overlayRequired = true;
     }
 
@@ -407,6 +571,26 @@ public class Menu {
 
         mWindowManager = ((Activity) context).getWindowManager();
         mWindowManager.addView(rootFrame, vmParams);
+
+        vmParams2 = new WindowManager.LayoutParams(-2, -2,
+                0,
+                0,
+                WindowManager.LayoutParams.TYPE_APPLICATION,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                        WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                PixelFormat.TRANSPARENT
+        );
+        vmParams2.gravity = 51;
+        vmParams2.x = POS_X;
+        vmParams2.y = POS_Y;
+
+        mWindowManager2 = ((Activity) context).getWindowManager();
+        mWindowManager2.addView(GaySex69Icon(), vmParams2);
+
+
+
     }
 
 
