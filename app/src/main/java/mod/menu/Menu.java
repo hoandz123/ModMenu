@@ -7,18 +7,14 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,9 +45,28 @@ public class Menu {
         this.context = context;
         rootFrame = new FrameLayout(context);
 
+//
+//        FrameLayout linBGColor = new FrameLayout(context);
+//        linBGColor.setBackgroundColor(Color.parseColor("#99000000"));
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+//                FrameLayout.LayoutParams.MATCH_PARENT,
+//                FrameLayout.LayoutParams.MATCH_PARENT
+//        );
+//        params.topMargin = 10;
+//        params.bottomMargin = 3;
+//        params.leftMargin = 3;
+//        params.rightMargin = 3;
+//
+//        linBGColor.setLayoutParams(params);
+//        rootFrame.addView(linBGColor);
+//
+//        FrameLayout linBGIMG = new FrameLayout(context);
+////        linBGIMG.setPadding(5, 15, 5, 5);
+//        rootFrame.addView(linBGIMG);
+
         try {
             AssetManager assetManager = context.getAssets();
-            InputStream inputStream = assetManager.open("khung_menu_blur85.png");
+            InputStream inputStream = assetManager.open("khung_menu_blur2.png");
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
             rootFrame.setBackground(drawable);
@@ -59,108 +74,6 @@ public class Menu {
             e.printStackTrace();
         }
 
-        LinearLayout main1 = new LinearLayout(context);
-        main1.setOrientation(LinearLayout.HORIZONTAL);
-        main1.setBackgroundColor(Color.TRANSPARENT);
-        main1.setPadding(dp(12), dp(25), 3, dp(10));
-        rootFrame.addView(main1);
-
-
-        LinearLayout maintab = new LinearLayout(context);
-        maintab.setOrientation(LinearLayout.VERTICAL);
-        maintab.setBackgroundColor(Color.TRANSPARENT);
-        maintab.setPadding(0, dp(25), 0, dp(25));
-        main1.addView(maintab, MENU_WIDTH / 5, -1);
-
-
-
-        LinearLayout tab1 = new LinearLayout(context);
-        tab1.setGravity(Gravity.CENTER | Gravity.RIGHT);
-        tab1.setPadding(dp(15), dp(0), dp(15), dp(0));
-        maintab.addView(tab1, -1, dp(35));
-        try {
-            AssetManager assetManager = context.getAssets();
-            InputStream inputStream = assetManager.open("img_1.png");
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-            tab1.setBackground(drawable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        TextView tv1 = new TextView(context);
-        tv1.setText("Home");
-        tv1.setGravity(Gravity.CENTER | Gravity.RIGHT);
-        tv1.setTextSize(convertDipToPixels(15));
-        tv1.setTextColor(Color.parseColor("#FFFFFFFF"));
-        try {
-            Typeface customFont = Typeface.createFromAsset(context.getAssets(), "staccato.ttf");
-            tv1.setTypeface(customFont);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        tv1.setShadowLayer(5, 0, 0, Color.parseColor("#FF000000"));
-        tab1.addView(tv1, -1, -1);
-
-
-
-
-        LinearLayout tab2 = new LinearLayout(context);
-        maintab.addView(tab2, -1, dp(35));
-        try {
-            AssetManager assetManager = context.getAssets();
-            InputStream inputStream = assetManager.open("img_1.png");
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-            tab2.setBackground(drawable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        LinearLayout tab3 = new LinearLayout(context);
-        maintab.addView(tab3, -1, dp(35));
-        try {
-            AssetManager assetManager = context.getAssets();
-            InputStream inputStream = assetManager.open("img_1.png");
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-            tab3.setBackground(drawable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        LinearLayout tab4 = new LinearLayout(context);
-        maintab.addView(tab4, -1, dp(35));
-        try {
-            AssetManager assetManager = context.getAssets();
-            InputStream inputStream = assetManager.open("img_1.png");
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-            tab4.setBackground(drawable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        LinearLayout tab5 = new LinearLayout(context);
-        maintab.addView(tab5, -1, dp(35));
-        try {
-            AssetManager assetManager = context.getAssets();
-            InputStream inputStream = assetManager.open("img_1.png");
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-            tab5.setBackground(drawable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-        LinearLayout vachke1 = new LinearLayout(context);
-        android.graphics.drawable.GradientDrawable STKOYM = new android.graphics.drawable.GradientDrawable();
-        STKOYM.setCornerRadii(new float[]{ (float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0 });
-        STKOYM.setStroke(2,Color.parseColor("#FF444444"));
-        STKOYM.setColor(Color.parseColor("#FF6F6F6F"));
-        vachke1.setBackground(STKOYM);
-        main1.addView(vachke1, 7, -1);
 
 
     }
