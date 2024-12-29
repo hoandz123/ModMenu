@@ -1,22 +1,6 @@
 #define targetLibName OBFUSCATE("libil2cpp.so")
-
-#include <list>
-#include <vector>
-#include <string.h>
-#include <pthread.h>
-#include <thread>
-#include <cstring>
-#include <jni.h>
-#include <unistd.h>
-#include <fstream>
-#include <iostream>
-#include <dlfcn.h>
-#include "Includes/Logger.h"
-#include "Includes/obfuscate.h"
-#include "Includes/Utils.h"
-#include "KittyMemory/MemoryPatch.h"
+#include "Includes/include.h"
 #include "Menu/Setup.h"
-#include "Includes/Macros.h"
 
 void *hack_thread(void *) {
     do {
