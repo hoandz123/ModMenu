@@ -77,7 +77,7 @@ public class Menu {
 
 
     }
-    
+
 
     @SuppressLint("WrongConstant")
     public void SetWindowManagerWindowService() {
