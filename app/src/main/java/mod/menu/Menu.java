@@ -76,7 +76,7 @@ public class Menu {
 
         LinearLayout tab1 = new LinearLayout(context);
         tab1.setGravity(Gravity.CENTER | Gravity.RIGHT);
-        tab1.setPadding(dp(10), dp(0), dp(10), dp(0));
+        tab1.setPadding(dp(15), dp(0), dp(15), dp(0));
         maintab.addView(tab1, -1, dp(35));
         try {
             AssetManager assetManager = context.getAssets();
@@ -89,29 +89,17 @@ public class Menu {
         }
         TextView tv1 = new TextView(context);
         tv1.setText("Home");
+        tv1.setGravity(Gravity.CENTER | Gravity.RIGHT);
         tv1.setTextSize(convertDipToPixels(15));
-//        tv1.setTextColor(Color.parseColor("#FFFFFFFF"));
+        tv1.setTextColor(Color.parseColor("#FFFFFFFF"));
         try {
             Typeface customFont = Typeface.createFromAsset(context.getAssets(), "staccato.ttf");
             tv1.setTypeface(customFont);
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        tv1.setShadowLayer(10, 0, 0, Color.parseColor("#FF000000"));
-        tv1.setLayerType(View.LAYER_TYPE_SOFTWARE, null); // Bắt buộc để áp dụng hiệu ứng vẽ
-
-// Lấy Paint để tùy chỉnh
-        Paint paint = tv1.getPaint();
-
-// Vẽ nền chữ đen
-        paint.setStyle(Paint.Style.FILL); // Vẽ nền chữ
-        tv1.setTextColor(Color.BLACK); // Màu nền chữ là đen
-
-// Vẽ viền trắng
-        paint.setStyle(Paint.Style.STROKE); // Vẽ viền
-        paint.setStrokeWidth(3); // Độ rộng của viền
-        paint.setColor(Color.WHITE);
-        tab1.addView(tv1);
+        tv1.setShadowLayer(5, 0, 0, Color.parseColor("#FF000000"));
+        tab1.addView(tv1, -1, -1);
 
 
 
