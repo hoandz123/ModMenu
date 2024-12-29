@@ -43,6 +43,24 @@ import android.content.res.AssetManager;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.GradientDrawable;
 
+//******************gay sex button*********************************************
+import android.widget.Button;
+import android.os.Handler;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.content.res.AssetManager;
+import java.io.IOException;
+import java.io.InputStream;
+import android.util.Log;
+import android.view.Gravity;
+import android.content.Context;
+
+
+
+
 public class Menu {
 
     public Context context;
@@ -107,6 +125,7 @@ public class Menu {
             GaySex69Icon();
         }
         GaySex69Icon();
+        addNewButton();
 
         LinearLayout main1 = new LinearLayout(context);
         main1.setOrientation(LinearLayout.HORIZONTAL);
@@ -137,7 +156,7 @@ public class Menu {
             e.printStackTrace();
         }
         TextView tv1 = new TextView(context);
-        tv1.setText("Home");
+        tv1.setText("HOME");
         tv1.setGravity(Gravity.CENTER | Gravity.RIGHT);
         tv1.setTextSize(convertDipToPixels(15));
         tv1.setTextColor(Color.parseColor("#FFFFFFFF"));
@@ -214,6 +233,50 @@ public class Menu {
         loadMenu();
     }
 
+
+    private void addNewButton() {
+        Button newButton = new Button(context);
+        setButtonBackground(newButton, "close0.png");
+        final String[] images = {"close0.png", "close1.png", "close2.png", "close3.png"};
+        final int[] currentIndex = {0};
+        Handler handler = new Handler();
+        Runnable changeImageRunnable = new Runnable() {
+            @Override
+            public void run() {
+                currentIndex[0] = (currentIndex[0] + 1) % images.length;
+                setButtonBackground(newButton, images[currentIndex[0]]);
+                handler.postDelayed(this, 150);
+            }
+        };
+        handler.postDelayed(changeImageRunnable, 150);
+        FrameLayout.LayoutParams buttonParams = new FrameLayout.LayoutParams(dp(100), dp(100));
+        buttonParams.gravity = Gravity.START | Gravity.TOP;
+        buttonParams.leftMargin = dp(80);
+        buttonParams.topMargin = dp(100);
+        newButton.setLayoutParams(buttonParams);
+        rootFrame.addView(newButton);
+    }
+    private void setButtonBackground(Button button, String imageName) {
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open(imageName);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+            drawable.setTileModeXY(null, null);
+            button.setBackground(drawable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+
+
+
     //******************gay sex icon*********************************************
     private void GaySex69Icon() {
         FrameLayout customFrameLayout = new FrameLayout(context);
@@ -273,6 +336,12 @@ public class Menu {
     private TextView createNameTextView() {
         TextView nameTextView = new TextView(context);
         nameTextView.setText("đọc là bị gay lỏ");
+        try {
+            Typeface customFont = Typeface.createFromAsset(context.getAssets(), "staccato.ttf");
+            nameTextView.setTypeface(customFont);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         nameTextView.setTextColor(Color.WHITE);
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         nameTextView.setTypeface(null, Typeface.BOLD);
