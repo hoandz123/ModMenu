@@ -183,17 +183,9 @@ jobjectArray GetFeatureList(JNIEnv *env, jobject context) {
     for (int i = 0; i < Total_Feature; i++) {
         Feature feature = features[i];
         std::ostringstream oss;
-        if (feature.number != -1) {
-            oss << feature.number << "_";
-        }
-        oss << feature.category;
-        if (!feature.flag.empty()) {
-            oss << "_" << feature.flag;
-        }
-        if (!feature.description.empty()) {
-            oss << "_" << feature.description;
-        }
-
+        oss << feature.number << "_";
+        oss << "_" << feature.flag;
+        oss << "_" << feature.description;
         std::string fet = oss.str();
 
         env->SetObjectArrayElement(ret, i, env->NewStringUTF(fet.c_str()));
@@ -212,6 +204,8 @@ void Changes(JNIEnv *env, jclass clazz, jobject obj,
 
     switch (featNum) {
         case 0:
+            // MOV R0, #0x0 = 00 00 A0 E3
+            // BX LR = 1E FF 2F E1
             PATCH_LIB_SWITCH("libil2cpp.so", "0x100000", "00 00 A0 E3 1E FF 2F E1", boolean);
             break;
         case 100:

@@ -7,14 +7,13 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -41,17 +40,46 @@ public class Menu {
     WindowManager mWindowManager;
     WindowManager.LayoutParams vmParams;
     FrameLayout rootFrame;
+    LinearLayout maintab;
 
+    native void Init(Context context, TextView title, TextView subTitle);
 
+    native String Icon();
 
+    native String IconWebViewData();
+
+    native String[] GetFeatureList();
+
+    native String[] SettingsList();
+
+    native boolean IsGameLibLoaded();
 
     public Menu(Context context) {
         this.context = context;
         rootFrame = new FrameLayout(context);
 
+//
+//        FrameLayout linBGColor = new FrameLayout(context);
+//        linBGColor.setBackgroundColor(Color.parseColor("#99000000"));
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+//                FrameLayout.LayoutParams.MATCH_PARENT,
+//                FrameLayout.LayoutParams.MATCH_PARENT
+//        );
+//        params.topMargin = 10;
+//        params.bottomMargin = 3;
+//        params.leftMargin = 3;
+//        params.rightMargin = 3;
+//
+//        linBGColor.setLayoutParams(params);
+//        rootFrame.addView(linBGColor);
+//
+//        FrameLayout linBGIMG = new FrameLayout(context);
+////        linBGIMG.setPadding(5, 15, 5, 5);
+//        rootFrame.addView(linBGIMG);
+
         try {
             AssetManager assetManager = context.getAssets();
-            InputStream inputStream = assetManager.open("khung_menu_blur85.png");
+            InputStream inputStream = assetManager.open("khung_menu_blur2.png");
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
             rootFrame.setBackground(drawable);
@@ -66,7 +94,7 @@ public class Menu {
         rootFrame.addView(main1);
 
 
-        LinearLayout maintab = new LinearLayout(context);
+        maintab = new LinearLayout(context);
         maintab.setOrientation(LinearLayout.VERTICAL);
         maintab.setBackgroundColor(Color.TRANSPARENT);
         maintab.setPadding(0, dp(25), 0, dp(25));
@@ -162,7 +190,7 @@ public class Menu {
         vachke1.setBackground(STKOYM);
         main1.addView(vachke1, 7, -1);
 
-
+        loadMenu();
     }
     
 
@@ -196,6 +224,24 @@ public class Menu {
         mWindowManager = ((Activity) context).getWindowManager();
         mWindowManager.addView(rootFrame, vmParams);
     }
+
+
+
+
+
+    void loadMenu() {
+        String[] listFature = GetFeatureList();
+        for (int i = 0; i < listFature.length; i++) {
+            String[] list = listFature[i].split("_");
+            for (int j = 0; j < list.length; j++) {
+                Log.d("ModMenu", list[j]);
+            }
+        }
+    }
+
+
+
+
 
     private int convertDipToPixels(int i) {
         return (int) ((((float) i) * context.getResources().getDisplayMetrics().density) + 0.5f);

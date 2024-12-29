@@ -16,11 +16,11 @@ public class Main {
             Menu menu = new Menu(context);
             menu.SetWindowManagerActivity();
         } else {
-            CheckOverlayPermission(context);
+//            CheckOverlayPermission(context);
         }
     }
 
     public static void Start(Context context) {
-        CheckOverlayPermission(context);
+//        CheckOverlayPermission(context);
     }
 }
