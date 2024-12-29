@@ -12,6 +12,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -41,9 +42,19 @@ public class Menu {
     WindowManager mWindowManager;
     WindowManager.LayoutParams vmParams;
     FrameLayout rootFrame;
+    LinearLayout maintab;
 
+    native void Init(Context context, TextView title, TextView subTitle);
 
+    native String Icon();
 
+    native String IconWebViewData();
+
+    native String[] GetFeatureList();
+
+    native String[] SettingsList();
+
+    native boolean IsGameLibLoaded();
 
     public Menu(Context context) {
         this.context = context;
@@ -66,7 +77,7 @@ public class Menu {
         rootFrame.addView(main1);
 
 
-        LinearLayout maintab = new LinearLayout(context);
+        maintab = new LinearLayout(context);
         maintab.setOrientation(LinearLayout.VERTICAL);
         maintab.setBackgroundColor(Color.TRANSPARENT);
         maintab.setPadding(0, dp(25), 0, dp(25));
@@ -162,7 +173,7 @@ public class Menu {
         vachke1.setBackground(STKOYM);
         main1.addView(vachke1, 7, -1);
 
-
+        loadMenu();
     }
     
 
@@ -196,6 +207,24 @@ public class Menu {
         mWindowManager = ((Activity) context).getWindowManager();
         mWindowManager.addView(rootFrame, vmParams);
     }
+
+
+
+
+
+    void loadMenu() {
+        String[] listFature = GetFeatureList();
+        for (int i = 0; i < listFature.length; i++) {
+            String[] list = listFature[i].split("_");
+            for (int j = 0; j < list.length; j++) {
+                Log.d("ModMenu", list[j]);
+            }
+        }
+    }
+
+
+
+
 
     private int convertDipToPixels(int i) {
         return (int) ((((float) i) * context.getResources().getDisplayMetrics().density) + 0.5f);
