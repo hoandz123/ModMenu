@@ -1,12 +1,42 @@
 LOCAL_PATH := $(call my-dir)
+
+
+
+
 include $(CLEAR_VARS)
+LOCAL_MODULE := libcurl
+LOCAL_SRC_FILES := Includes/curl/curl-android-$(TARGET_ARCH_ABI)/lib/libcurl.a
+include $(PREBUILT_STATIC_LIBRARY)
 
-# Here is the name of your lib.
-# When you change the lib name, change also on System.loadLibrary("") under OnCreate method on StaticActivity.java
-# Both must have same name
+include $(CLEAR_VARS)
+LOCAL_MODULE := libssl
+LOCAL_SRC_FILES := Includes/curl/openssl-android-$(TARGET_ARCH_ABI)/lib/libssl.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := libcrypto
+LOCAL_SRC_FILES := Includes/curl/openssl-android-$(TARGET_ARCH_ABI)/lib/libcrypto.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+#=================================================================================
+include $(CLEAR_VARS)
+LOCAL_MODULE   := libdobby
+LOCAL_SRC_FILES := $(LOCAL_PATH)Includes/Dobby/libraries/$(TARGET_ARCH_ABI)/libdobby.a
+LOCAL_SRC_FILES := Includes/Dobby/libraries/$(TARGET_ARCH_ABI)/libdobby.a
+include $(PREBUILT_STATIC_LIBRARY)
+#=================================================================================
+
+
+
+
+
+
+
+
+
+
+include $(CLEAR_VARS)
 LOCAL_MODULE    := MyLibName
-
-# -std=c++17 is required to support AIDE app with NDK
 LOCAL_CFLAGS := -w -s -Wno-error=format-security -fvisibility=hidden -fpermissive -fexceptions
 LOCAL_CPPFLAGS := -w -s -Wno-error=format-security -fvisibility=hidden -Werror -std=c++17
 LOCAL_CPPFLAGS += -Wno-error=c++11-narrowing -fpermissive -Wall -fexceptions
@@ -15,18 +45,25 @@ LOCAL_LDLIBS := -llog -landroid -lEGL -lGLESv2
 LOCAL_ARM_MODE := arm
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/Includes
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/Includes/curl/curl-android-$(TARGET_ARCH_ABI)/include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/Includes/curl/openssl-android-$(TARGET_ARCH_ABI)/include
 
-# Here you add the cpp file to compile
+
+define get_sources
+$(wildcard $(1)/*.c) $(wildcard $(1)/*.cpp)
+endef
+
+
 LOCAL_SRC_FILES := Main.cpp \
-	Substrate/hde64.c \
-	Substrate/SubstrateDebug.cpp \
-	Substrate/SubstrateHook.cpp \
-	Substrate/SubstratePosixMemory.cpp \
-	Substrate/SymbolFinder.cpp \
-	KittyMemory/KittyMemory.cpp \
-	KittyMemory/MemoryPatch.cpp \
-    KittyMemory/MemoryBackup.cpp \
-    KittyMemory/KittyUtils.cpp \
-	And64InlineHook/And64InlineHook.cpp \
+    $(call get_sources, $(LOCAL_PATH)/Includes) \
+    $(call get_sources, $(LOCAL_PATH)/Includes/Substrate) \
+    $(call get_sources, $(LOCAL_PATH)/Includes/KittyMemory) \
+    $(call get_sources, $(LOCAL_PATH)/Includes/And64InlineHook) \
+	$(call get_sources, $(LOCAL_PATH)/IL2Cpp) \
+	$(call get_sources, $(LOCAL_PATH)/Includes/Tools) \
+    $(call get_sources, $(LOCAL_PATH)/Includes/base64) \
+    $(call get_sources, $(LOCAL_PATH)/Includes/ImGui) \
 
+LOCAL_STATIC_LIBRARIES					:= libcurl libssl libcrypto libdobby
 include $(BUILD_SHARED_LIBRARY)
