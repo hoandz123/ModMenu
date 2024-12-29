@@ -67,8 +67,7 @@ import java.io.InputStream;
 import android.util.Log;
 import android.view.Gravity;
 import android.content.Context;
-
-
+import android.widget.Toast;
 
 
 public class Menu {
@@ -84,8 +83,8 @@ public class Menu {
     boolean overlayRequired;
 
 
-    WindowManager mWindowManager, mWindowManager2;
-    WindowManager.LayoutParams vmParams, vmParams2;
+    WindowManager mWindowManager, mWindowManager2, mWindowManager3;
+    WindowManager.LayoutParams vmParams, vmParams2, vmParams3;
     FrameLayout rootFrame;
     LinearLayout maintab;
 
@@ -104,26 +103,6 @@ public class Menu {
     public Menu(Context context) {
         this.context = context;
         rootFrame = new FrameLayout(context);
-
-//
-//        FrameLayout linBGColor = new FrameLayout(context);
-//        linBGColor.setBackgroundColor(Color.parseColor("#99000000"));
-//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-//                FrameLayout.LayoutParams.MATCH_PARENT,
-//                FrameLayout.LayoutParams.MATCH_PARENT
-//        );
-//        params.topMargin = 10;
-//        params.bottomMargin = 3;
-//        params.leftMargin = 3;
-//        params.rightMargin = 3;
-//
-//        linBGColor.setLayoutParams(params);
-//        rootFrame.addView(linBGColor);
-//
-//        FrameLayout linBGIMG = new FrameLayout(context);
-////        linBGIMG.setPadding(5, 15, 5, 5);
-//        rootFrame.addView(linBGIMG);
-
         try {
             AssetManager assetManager = context.getAssets();
             InputStream inputStream = assetManager.open("khung_menu_blur2.png");
@@ -133,7 +112,6 @@ public class Menu {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        addNewButton();
 
         LinearLayout main1 = new LinearLayout(context);
         main1.setOrientation(LinearLayout.HORIZONTAL);
@@ -166,7 +144,7 @@ public class Menu {
         TextView tv1 = new TextView(context);
         tv1.setText("HOME");
         tv1.setGravity(Gravity.CENTER | Gravity.RIGHT);
-        tv1.setTextSize(convertDipToPixels(15));
+        tv1.setTextSize(convertDipToPixels(12));
         tv1.setTextColor(Color.parseColor("#FFFFFFFF"));
         try {
             Typeface customFont = Typeface.createFromAsset(context.getAssets(), "staccato.ttf");
@@ -241,10 +219,10 @@ public class Menu {
         loadMenu();
     }
 
-
-    private void addNewButton() {
-        Button newButton = new Button(context);
-        setButtonBackground(newButton, "close0.png");
+    Button backgroudButton;
+    private View addNewButton() {
+        backgroudButton = new Button(context);
+        setButtonBackground(backgroudButton, "close0.png");
         final String[] images = {"close0.png", "close1.png", "close2.png", "close3.png"};
         final int[] currentIndex = {0};
         Handler handler = new Handler();
@@ -252,18 +230,47 @@ public class Menu {
             @Override
             public void run() {
                 currentIndex[0] = (currentIndex[0] + 1) % images.length;
-                setButtonBackground(newButton, images[currentIndex[0]]);
-                handler.postDelayed(this, 150);
+                setButtonBackground(backgroudButton, images[currentIndex[0]]);
+                handler.postDelayed(this, 400);
             }
         };
         handler.postDelayed(changeImageRunnable, 150);
-        FrameLayout.LayoutParams buttonParams = new FrameLayout.LayoutParams(dp(100), dp(100));
-        buttonParams.gravity = Gravity.START | Gravity.TOP;
-        buttonParams.leftMargin = dp(80);
-        buttonParams.topMargin = dp(100);
-        newButton.setLayoutParams(buttonParams);
-        rootFrame.addView(newButton);
+//        newButton.setBackgroundColor(0xffffffff);
+
+        backgroudButton.setOnTouchListener(new View.OnTouchListener() {
+            private float initialX, initialTouchX;
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (rootFrame.getVisibility() == View.GONE) return false;
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialTouchX = motionEvent.getRawX();
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        float deltaX = motionEvent.getRawX() - initialTouchX;
+                        if (deltaX < -50) {
+                            rootFrame.setVisibility(View.GONE);
+                            backgroudButton.setVisibility(View.GONE);
+                            return true;
+                        }
+                        return false;
+
+                    case MotionEvent.ACTION_UP:
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
+        return backgroudButton;
     }
+
+
+
+
     private void setButtonBackground(Button button, String imageName) {
         try {
             AssetManager assetManager = context.getAssets();
@@ -289,7 +296,7 @@ public class Menu {
     int initialWidth;
     int defoultleftMargin;
     boolean isRunShow = false;
-
+    boolean isRunShowHide = false;
     private View GaySex69Icon() {
         FrameLayout customFrameLayout = new FrameLayout(context);
         customFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(-2, dp(60)));
@@ -303,6 +310,7 @@ public class Menu {
         final Runnable showToastRunnable = new Runnable() {
             @Override
             public void run() {
+                isRunShowHide = true;
                 if (initialWidth == 0) initialWidth = nameTextView.getWidth();
                 nameParams = (FrameLayout.LayoutParams) nameTextView.getLayoutParams(); // Sử dụng biến nameParams đã có
                 if (defoultleftMargin == 0) defoultleftMargin = nameParams.leftMargin;
@@ -329,6 +337,28 @@ public class Menu {
                         nameTextView.setLayoutParams(nameParams);
                     }
                 });
+                marginAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        Log.d("ModMenu", "animation start");
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        Log.d("ModMenu", "animation end");
+                        isRunShowHide = false;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        Log.d("ModMenu", "animation cancel");
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+                        Log.d("ModMenu", "animation repeat");
+                    }
+                });
 
                 AnimatorSet animatorSet = new AnimatorSet();
                 animatorSet.playSequentially(widthAnimator, marginAnimator);
@@ -340,6 +370,7 @@ public class Menu {
         customFrameLayout.setOnTouchListener(new View.OnTouchListener() {
             private float initialTouchX, initialTouchY;
             private int initialX, initialY;
+            private long startTime;
 
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -353,12 +384,18 @@ public class Menu {
                         initialY = vmParams2.y;
                         initialTouchX = motionEvent.getRawX();
                         initialTouchY = motionEvent.getRawY();
+                        startTime = System.currentTimeMillis();
 
-                        if (!isRunShow) animateViewFromZero();
+                        if (!isRunShow && !isRunShowHide) animateViewFromZero();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        int rawX = (int) (motionEvent.getRawX() - initialTouchX);
-                        int rawY = (int) (motionEvent.getRawY() - initialTouchY);
+                        long duration = System.currentTimeMillis() - startTime; // Tính thời gian nhấn
+                        if (duration <= 150) {
+                            if (rootFrame.getVisibility() == View.GONE) {
+                                rootFrame.setVisibility(View.VISIBLE);
+                                backgroudButton.setVisibility(View.VISIBLE);
+                            }
+                        }
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
@@ -535,13 +572,6 @@ public class Menu {
     @SuppressLint("WrongConstant")
     public void SetWindowManagerWindowService() {
         int iparams = Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O ? 2038 : 2002;
-        vmParams = new WindowManager.LayoutParams(MENU_WIDTH, MENU_HEIGHT, iparams, 8, -3);
-        vmParams.gravity = 51;
-        vmParams.x = POS_X;
-        vmParams.y = POS_Y;
-
-        mWindowManager = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
-        mWindowManager.addView(rootFrame, vmParams);
 
         vmParams2 = new WindowManager.LayoutParams(-2, -2, iparams, 8, -3);
         vmParams2.gravity = 51;
@@ -551,26 +581,29 @@ public class Menu {
         mWindowManager2 = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
         mWindowManager2.addView(GaySex69Icon(), vmParams2);
 
+        vmParams = new WindowManager.LayoutParams(MENU_WIDTH, MENU_HEIGHT, iparams, 8, -3);
+        vmParams.gravity = 51;
+        vmParams.x = POS_X;
+        vmParams.y = POS_Y;
+
+        mWindowManager = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
+        mWindowManager.addView(rootFrame, vmParams);
+
+
+        vmParams3 = new WindowManager.LayoutParams(dp(80), dp(60), iparams, 8, -3);
+        vmParams3.gravity = Gravity.CENTER;
+        vmParams3.x = -(MENU_WIDTH / 2) - dp(40);
+        vmParams3.y = 0;
+
+        mWindowManager3 = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
+        mWindowManager3.addView(addNewButton(), vmParams3);
+
 
         overlayRequired = true;
     }
 
     @SuppressLint("WrongConstant")
     public void SetWindowManagerActivity() {
-        vmParams = new WindowManager.LayoutParams(MENU_WIDTH, MENU_HEIGHT,
-                0,
-                0,
-                WindowManager.LayoutParams.TYPE_APPLICATION,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
-                        WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
-                PixelFormat.TRANSPARENT
-        );
-        vmParams.gravity = Gravity.CENTER;
-
-        mWindowManager = ((Activity) context).getWindowManager();
-        mWindowManager.addView(rootFrame, vmParams);
 
         vmParams2 = new WindowManager.LayoutParams(-2, -2,
                 0,
@@ -589,7 +622,35 @@ public class Menu {
         mWindowManager2 = ((Activity) context).getWindowManager();
         mWindowManager2.addView(GaySex69Icon(), vmParams2);
 
+        vmParams = new WindowManager.LayoutParams(MENU_WIDTH, MENU_HEIGHT,
+                0,
+                0,
+                WindowManager.LayoutParams.TYPE_APPLICATION,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                        WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                PixelFormat.TRANSPARENT
+        );
+        vmParams.gravity = Gravity.CENTER;
 
+        mWindowManager = ((Activity) context).getWindowManager();
+        mWindowManager.addView(rootFrame, vmParams);
+
+        vmParams3 = new WindowManager.LayoutParams(dp(80), dp(60),
+                -(MENU_WIDTH / 2) - dp(40),
+                0,
+                WindowManager.LayoutParams.TYPE_APPLICATION,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                        WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                PixelFormat.TRANSPARENT
+        );
+        vmParams3.gravity = Gravity.CENTER;
+
+        mWindowManager3 = ((Activity) context).getWindowManager();
+        mWindowManager3.addView(addNewButton(), vmParams3);
 
     }
 
