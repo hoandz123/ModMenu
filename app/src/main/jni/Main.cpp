@@ -167,10 +167,10 @@ jobjectArray GetFeatureList(JNIEnv *env, jobject context) {
     jobjectArray ret;
 
     Feature features[] = {
-            //id    view        default   name
-            {-1,   "Category",  "",      "The Category"},
-            {-1,   "Toggle",    "",      "The toggle"},
-            {100,  "Toggle",    "True",  "The toggle 2"},
+            //id    view        TAB     name
+            {100,   "Category",  "A",   "Thông Báo"},
+            {101,   "Toggle",    "A",   "Thông "},
+            {102,   "Toggle",    "B",   "The toggle 2"},
     };
 
 
